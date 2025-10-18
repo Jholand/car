@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 const CarListing = () => {
   const [searchName, setSearchName] = useState("");
   const [searchPrice, setSearchPrice] = useState("");
-  const [selectedCar, setSelectedCar] = useState(null);
+  const navigate = useNavigate();
 
   const cars = [
     { id: 1, name: "Toyota Corolla", price: 25000, description: "Reliable and fuel-efficient.", image: "https://images.unsplash.com/photo-1605559424843-9e4c0f5e8d6e" },
@@ -44,12 +45,19 @@ const CarListing = () => {
       {filteredCars.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCars.map(car => (
-            <div key={car.id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden">
+            <div
+              key={car.id}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter') navigate('/order', { state: { car } }); }}
+              onClick={() => navigate('/order', { state: { car } })}
+              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer"
+            >
               <img src={car.image} alt={car.name} className="w-full h-56 object-cover"/>
               <div className="p-5">
                 <h3 className="text-xl font-semibold text-gray-800">{car.name}</h3>
                 <p className="text-gray-600 mb-3">${car.price.toLocaleString()}</p>
-                <button onClick={() => setSelectedCar(car)} className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 rounded-lg hover:scale-105 transition-all duration-300 font-medium">
+                <button onClick={(e) => { e.stopPropagation(); navigate('/order', { state: { car } }); }} className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 rounded-lg hover:scale-105 transition-all duration-300 font-medium">
                   View Details
                 </button>
               </div>
@@ -60,22 +68,7 @@ const CarListing = () => {
         <p className="text-center text-gray-500 mt-10">No cars match your filters.</p>
       )}
 
-      {/* Modal */}
-      {selectedCar && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden">
-            <img src={selectedCar.image} alt={selectedCar.name} className="w-full h-60 object-cover"/>
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">{selectedCar.name}</h2>
-              <p className="text-gray-600 mb-2">${selectedCar.price.toLocaleString()}</p>
-              <p className="text-gray-700 mb-5">{selectedCar.description}</p>
-              <button onClick={() => setSelectedCar(null)} className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2.5 rounded-lg hover:scale-105 transition-all duration-300 font-semibold">
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modal removed: card click now navigates to /order */}
     </div>
   );
 };

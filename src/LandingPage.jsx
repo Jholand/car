@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import "./App.css";
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [contact, setContact] = React.useState({ name: "", email: "", message: "" });
+  const [contactSent, setContactSent] = React.useState(false);
 
   return (
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen w-full relative">
@@ -53,6 +55,65 @@ const LandingPage = () => {
                 <p className="text-gray-600">{item.desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* About */}
+        <section id="about" className="max-w-5xl mx-auto py-20">
+          <div className="bg-white rounded-2xl shadow-md p-10 text-center">
+            <h3 className="text-4xl font-bold mb-4 text-gray-900">About AutoDrive</h3>
+            <p className="text-gray-600 mb-6">
+              AutoDrive is dedicated to connecting drivers with high-quality vehicles across a wide range of styles and budgets. Our platform partners with verified sellers and offers transparent listings, expert support, and flexible financing options to help you find the perfect car.
+            </p>
+            <div className="flex items-center justify-center">
+              <Button label="Learn more" onClick={() => navigate('/about')} />
+            </div>
+          </div>
+        </section>
+
+        {/* Contact */}
+        <section id="contact" className="max-w-3xl mx-auto py-12">
+          <div className="bg-white rounded-2xl shadow-md p-8">
+            <h3 className="text-3xl font-bold mb-4 text-gray-900">Contact Us</h3>
+            <p className="text-gray-600 mb-6">Have questions? Send us a message and we'll get back to you shortly.</p>
+
+            {contactSent ? (
+              <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">Thanks — your message has been sent.</div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  // simulate send
+                  setContactSent(true);
+                  setTimeout(() => setContactSent(false), 5000);
+                  setContact({ name: "", email: "", message: "" });
+                }}
+                className="space-y-4"
+              >
+                <input
+                  value={contact.name}
+                  onChange={(e) => setContact({ ...contact, name: e.target.value })}
+                  placeholder="Your name"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+                <input
+                  value={contact.email}
+                  onChange={(e) => setContact({ ...contact, email: e.target.value })}
+                  placeholder="Email address"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+                <textarea
+                  value={contact.message}
+                  onChange={(e) => setContact({ ...contact, message: e.target.value })}
+                  placeholder="Message"
+                  rows="4"
+                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+                <div className="flex justify-end">
+                  <Button label="Send message" type="submit" />
+                </div>
+              </form>
+            )}
           </div>
         </section>
       </main>

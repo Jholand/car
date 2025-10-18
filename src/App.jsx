@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import LandingPage from "./LandingPage";
 import CarListing from "./CarListing";
@@ -8,7 +8,6 @@ import Footer from "./components/Footer";
 import "./App.css";
 
 const AppWrapper = () => {
-  const [showOrderForm, setShowOrderForm] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -16,15 +15,15 @@ const AppWrapper = () => {
       <Navbar
         onHomeClick={() => navigate("/")}
         onCarListingClick={() => navigate("/car-listing")}
-        onOrderClick={() => setShowOrderForm(true)}
+        onOrderClick={() => navigate("/order")}
       />
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/car-listing" element={<CarListing />} />
+        <Route path="/order" element={<OrderForm />} />
       </Routes>
 
-      {showOrderForm && <OrderForm onClose={() => setShowOrderForm(false)} />}
       <Footer />
     </>
   );
